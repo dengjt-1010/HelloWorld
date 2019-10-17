@@ -43,7 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(Constants.CAPACITY_CONTROLLER_PATH)
 public class CapacityController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CapacityController.class);
+    private static final Logger log = LoggerFactory.getLogger(CapacityController.class);
 
     private final CapacityService capacityService;
 
@@ -77,7 +77,7 @@ public class CapacityController {
             restResult.setCode(200);
             Capacity capacity = capacityService.getCapacityWithDefault(group, tenant);
             if (capacity == null) {
-                LOGGER.warn("[getCapacity] capacity不存在，需初始化 group: {}, tenant: {}", group, tenant);
+                log.warn("[getCapacity] capacity不存在，需初始化 group: {}, tenant: {}", group, tenant);
                 capacityService.initCapacity(group, tenant);
                 capacity = capacityService.getCapacityWithDefault(group, tenant);
             }
@@ -85,7 +85,7 @@ public class CapacityController {
                 restResult.setData(capacity);
             }
         } catch (Exception e) {
-            LOGGER.error("[getCapacity] ", e);
+            log.error("[getCapacity] ", e);
             response.setStatus(500);
             restResult.setCode(500);
             restResult.setMessage(e.getMessage());
@@ -145,7 +145,7 @@ public class CapacityController {
             restResult.setMessage(String.format("%s为%s的容量信息配置更新失败", targetFieldName, targetFieldValue));
             return restResult;
         } catch (Exception e) {
-            LOGGER.error("[updateCapacity] ", e);
+            log.error("[updateCapacity] ", e);
             setFailResult(response, restResult, 500);
             restResult.setMessage(e.getMessage());
             return restResult;
